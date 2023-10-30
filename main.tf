@@ -8,7 +8,7 @@ terraform {
   required_version = ">=1.0"
 
   backend "s3" {
-    bucket  = "fnf-terraform-network"
+    bucket  = "fnf-terraform-network-fmr"
     key     = "terraform.tfstate"
     region  = "us-east-1"
   }
