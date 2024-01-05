@@ -17,20 +17,20 @@ resource "aws_alb" "fnf-alb" {
 }
 
 # configuracao de listener http 
-resource "aws_lb_listener" "fnf-alb-http" {
+resource "aws_lb_listener" "fnf-alb-ms-produto-http-listener" {
     load_balancer_arn = aws_alb.fnf-alb.arn
     port = 80
     protocol = "HTTP"
 
     default_action {
       type = "forward"
-      target_group_arn = aws_lb_target_group.fnf-lb-target-group.arn
+      target_group_arn = aws_lb_target_group.fnf-lb-ms-produto-target-group.arn
     }
 }
 
 # configuracao de target group do loadbalancer
-resource "aws_lb_target_group" "fnf-lb-target-group" {
-    name = "fnf-lb-target-group"
+resource "aws_lb_target_group" "fnf-lb-ms-produto-target-group" {
+    name = "fnf-lb-ms-produto-target-group"
     port = 3000
     protocol = "HTTP"
     target_type = "ip"
@@ -43,3 +43,20 @@ resource "aws_lb_target_group" "fnf-lb-target-group" {
 
     depends_on = [ aws_alb.fnf-alb ]
 }
+
+# configuracao de rule para forward ms-produto
+# resource "aws_lb_listener_rule" "fnf-lb-ms-produto-listener-rule" {
+#     listener_arn = aws_lb_listener.fnf-alb-ms-produto-http-listener.arn
+#     action {
+#       type = "forward"
+#       target_group_arn = aws_lb_target_group.fnf-lb-ms-produto-target-group.arn
+#     }
+#     condition {
+#       path_pattern {
+#         values = [ 
+#             "/v*/categoria/*",
+#             "/v*/produto/*",
+#         ]
+#       }
+#     }
+# }
