@@ -16,8 +16,8 @@ resource "aws_alb" "fnf-alb" {
     depends_on = [ aws_internet_gateway.fnf-igw ]
 }
 
-# configuracao de listener http 
-resource "aws_lb_listener" "fnf-alb-ms-produto-http-listener" {
+# configuracao de listener http produto
+resource "aws_lb_listener" "fnf-alb-http-listener" {
     load_balancer_arn = aws_alb.fnf-alb.arn
     port = 80
     protocol = "HTTP"
@@ -28,7 +28,7 @@ resource "aws_lb_listener" "fnf-alb-ms-produto-http-listener" {
     }
 }
 
-# configuracao de target group do loadbalancer
+# configuracao de produto target group do loadbalancer
 resource "aws_lb_target_group" "fnf-lb-ms-produto-target-group" {
     name = "fnf-lb-ms-produto-target-group"
     port = 3000
@@ -44,19 +44,49 @@ resource "aws_lb_target_group" "fnf-lb-ms-produto-target-group" {
     depends_on = [ aws_alb.fnf-alb ]
 }
 
-# configuracao de rule para forward ms-produto
-# resource "aws_lb_listener_rule" "fnf-lb-ms-produto-listener-rule" {
-#     listener_arn = aws_lb_listener.fnf-alb-ms-produto-http-listener.arn
-#     action {
-#       type = "forward"
-#       target_group_arn = aws_lb_target_group.fnf-lb-ms-produto-target-group.arn
-#     }
-#     condition {
-#       path_pattern {
-#         values = [ 
-#             "/v*/categoria/*",
-#             "/v*/produto/*",
-#         ]
-#       }
-#     }
-# }
+# configuracao de pagamento target group do loadbalancer
+resource "aws_lb_target_group" "fnf-lb-ms-pagamento-target-group" {
+    name = "fnf-lb-ms-pagamento-target-group"
+    port = 3000
+    protocol = "HTTP"
+    target_type = "ip"
+    vpc_id = aws_vpc.fnf-vpc.id
+    
+    health_check {
+      enabled = true
+      path = "/health"
+    }
+
+    depends_on = [ aws_alb.fnf-alb ]
+}
+
+resource "aws_lb_listener_rule" "fnf-alb-listener-rule-produto" {
+    listener_arn = aws_lb_listener.fnf-alb-http-listener.arn
+    
+    action {
+      type = "forward"
+      target_group_arn = aws_lb_target_group.fnf-lb-ms-produto-target-group.arn
+    }
+
+    condition {
+      path_pattern {
+        values = [ "/v1/produto/*", "/v1/categoria/*" ]
+      }
+    }  
+    
+}
+
+resource "aws_lb_listener_rule" "fnf-alb-listener-rule-pagamento" {
+    listener_arn = aws_lb_listener.fnf-alb-http-listener.arn
+    
+    action {
+      type = "forward"
+      target_group_arn = aws_lb_target_group.fnf-lb-ms-pagamento-target-group.arn
+    }
+
+    condition {
+      path_pattern {
+        values = [ "/v1/pagamento/*"]
+      }
+    }  
+}

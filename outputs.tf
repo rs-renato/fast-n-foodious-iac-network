@@ -10,8 +10,8 @@ output "fnf-subnet-private2-us-east-1b_id" {
   value = aws_subnet.fnf-subnet-private2-us-east-1b.id
 }
 
-output "fnf-alb-ms-produto-http-listener_arn" {
-  value = aws_lb_listener.fnf-alb-ms-produto-http-listener.arn
+output "fnf-alb-http-listener_arn" {
+  value = aws_lb_listener.fnf-alb-http-listener.arn
 }
 
 output "fnf-cluster-security-group_id" {
@@ -20,6 +20,10 @@ output "fnf-cluster-security-group_id" {
 
 output "fnf-lb-ms-produto-target-group_arn" {
   value = aws_lb_target_group.fnf-lb-ms-produto-target-group.arn
+}
+
+output "fnf-lb-ms-pagamento-target-group_arn" {
+  value = aws_lb_target_group.fnf-lb-ms-pagamento-target-group.arn
 }
 
 output "fnf-alb" {
