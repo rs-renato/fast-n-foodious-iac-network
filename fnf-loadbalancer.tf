@@ -60,6 +60,22 @@ resource "aws_lb_target_group" "fnf-lb-ms-pagamento-target-group" {
     depends_on = [ aws_alb.fnf-alb ]
 }
 
+# configuracao de pedido target group do loadbalancer
+resource "aws_lb_target_group" "fnf-lb-ms-pedido-target-group" {
+    name = "fnf-lb-ms-pedido-target-group"
+    port = 3000
+    protocol = "HTTP"
+    target_type = "ip"
+    vpc_id = aws_vpc.fnf-vpc.id
+    
+    health_check {
+      enabled = true
+      path = "/health"
+    }
+
+    depends_on = [ aws_alb.fnf-alb ]
+}
+
 resource "aws_lb_listener_rule" "fnf-alb-listener-rule-produto" {
     listener_arn = aws_lb_listener.fnf-alb-http-listener.arn
     
@@ -87,6 +103,21 @@ resource "aws_lb_listener_rule" "fnf-alb-listener-rule-pagamento" {
     condition {
       path_pattern {
         values = [ "/v1/pagamento/*"]
+      }
+    }  
+}
+
+resource "aws_lb_listener_rule" "fnf-alb-listener-rule-pedido" {
+    listener_arn = aws_lb_listener.fnf-alb-http-listener.arn
+    
+    action {
+      type = "forward"
+      target_group_arn = aws_lb_target_group.fnf-lb-ms-pedido-target-group.arn
+    }
+
+    condition {
+      path_pattern {
+        values = [ "/v1/pedido/*", "/v1/item/*","/v1/cliente/*" ]
       }
     }  
 }
