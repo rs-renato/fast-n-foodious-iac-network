@@ -22,6 +22,10 @@ output "fnf-lb-ms-produto-target-group_arn" {
   value = aws_lb_target_group.fnf-lb-ms-produto-target-group.arn
 }
 
+output "fnf-lb-ms-pedido-target-group_arn" {
+  value = aws_lb_target_group.fnf-lb-ms-pedido-target-group.arn
+}
+
 output "fnf-lb-ms-pagamento-target-group_arn" {
   value = aws_lb_target_group.fnf-lb-ms-pagamento-target-group.arn
 }
