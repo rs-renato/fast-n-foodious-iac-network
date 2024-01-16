@@ -30,8 +30,8 @@ output "fnf-lb-ms-pagamento-target-group_arn" {
   value = aws_lb_target_group.fnf-lb-ms-pagamento-target-group.arn
 }
 
-output "fnf-alb" {
-  value = aws_alb.fnf-alb
+output "fnf-alb_dns_name" {
+  value = aws_alb.fnf-alb.dns_name
 }
 
 output "fnf-database-security-group_id" {
