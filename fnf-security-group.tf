@@ -63,3 +63,25 @@ resource "aws_security_group" "fnf-database-security-group" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 }
+
+// configuracao de security group do documentdb
+resource "aws_security_group" "fnf-doc-database-security-group" {
+  name        = "fnf-doc-database-security-group"
+  description = "Allow traffic from fnf-lb-security-group on port 27017"
+  vpc_id      = aws_vpc.fnf-vpc.id
+  
+  ingress {
+    from_port   = 27017
+    to_port     = 27017
+    protocol    = "TCP"
+    security_groups = [aws_security_group.fnf-cluster-security-group.id]
+  }
+  
+  egress {
+    description = "Allow all outbound traffic"
+    from_port  = 0
+    to_port    = 0
+    protocol   = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
