@@ -37,3 +37,7 @@ output "fnf-alb_dns_name" {
 output "fnf-database-security-group_id" {
   value = aws_security_group.fnf-database-security-group.id
 }
+
+output "fnf-doc-database-security-group_id" {
+  value = aws_security_group.fnf-doc-database-security-group.id
+}
